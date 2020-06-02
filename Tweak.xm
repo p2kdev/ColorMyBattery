@@ -32,6 +32,9 @@
 
 NSDictionary *pref = [[NSDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.imkpatil.colormybattery.plist"];
 static BOOL isEnabled = YES;
+static BOOL wantsCustomBoltColor = NO;
+static BOOL wantsCustomBodyColor = NO;
+//static double bodyColorAlpha = 0.4;
 //static BOOL isBattPerdisabled = NO;
 
 static UIColor* GetBattColor(int currentLevel)
@@ -131,34 +134,6 @@ static UIColor* GetBattColor(int currentLevel)
   }
 }
 
-//iOS12 Support for devices with home button
-// %hook UIStatusBarBatteryItemView
-//
-//   -(_UILegibilityImageSet *)cachedImageSet
-//   {
-//     _UILegibilityImageSet *original = %orig;
-//
-//     if (isEnabled)
-//     {
-//       original.image = nil;//[original.image _flatImageWithColor:GetBattColor(self.cachedCapacity)]
-//
-//       // if (self.saverModeActive)
-//       // {
-//       //     return LCPParseColorString([pref objectForKey:@"LPMColor"], @"#F4EE36");
-//       // }
-//       // else if ((self.chargingState) == 1)
-//       // {
-//       //   return LCPParseColorString([pref objectForKey:@"ChargeColor"], @"#53FE31");
-//       // }
-//       //
-//       // int currentbat = (int)((self.chargePercent) * 100);
-//
-//     }
-//
-//     return original;
-//   }
-//
-// %end
 
 %hook _UIBatteryView
 
@@ -213,6 +188,30 @@ static UIColor* GetBattColor(int currentLevel)
     }
 }
 
+-(UIColor *)bodyColor
+{
+  if (isEnabled && wantsCustomBodyColor)
+    return LCPParseColorString([pref objectForKey:@"bodyColor"], @"#FFFFFF");
+  else
+    return %orig;
+}
+
+-(UIColor *)pinColor
+{
+  if (isEnabled && wantsCustomBodyColor)
+    return LCPParseColorString([pref objectForKey:@"bodyColor"], @"#FFFFFF");
+  else
+    return %orig;
+}
+
+-(UIColor *)boltColor
+{
+  if (isEnabled && wantsCustomBoltColor)
+    return LCPParseColorString([pref objectForKey:@"boltColor"], @"#FFFFFF");
+  else
+    return %orig;
+}
+
 %end
 
 %hook UIStatusBarForegroundStyleAttributes
@@ -264,6 +263,9 @@ static void reloadSettings(CFNotificationCenterRef center, void *observer, CFStr
   if(prefs)
   {
       isEnabled = [prefs objectForKey:@"TwkEnabled"] ? [[prefs objectForKey:@"TwkEnabled"] boolValue] : isEnabled;
+      wantsCustomBodyColor = [prefs objectForKey:@"wantsCustomBodyColor"] ? [[prefs objectForKey:@"wantsCustomBodyColor"] boolValue] : wantsCustomBodyColor;
+      wantsCustomBoltColor = [prefs objectForKey:@"wantsCustomBoltColor"] ? [[prefs objectForKey:@"wantsCustomBoltColor"] boolValue] : wantsCustomBoltColor;
+      //bodyColorAlpha = [prefs objectForKey:@"bodyColorAlpha"] ? [[prefs objectForKey:@"bodyColorAlpha"] doubleValue] : bodyColorAlpha;
       //isBattPerdisabled = [prefs objectForKey:@"HideBattPer"] ? [[prefs objectForKey:@"HideBattPer"] boolValue] : isBattPerdisabled;
   }
   [prefs release];}
