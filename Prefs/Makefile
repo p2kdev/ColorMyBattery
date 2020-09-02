@@ -9,6 +9,7 @@ ColorMyBattery_INSTALL_PATH = /Library/PreferenceBundles
 ColorMyBattery_FRAMEWORKS = UIKit CoreGraphics QuartzCore
 ColorMyBattery_PRIVATE_FRAMEWORKS = Preferences
 ColorMyBattery_LIBRARIES = colorpicker
+ColorMyBattery_CFLAGS = -fobjc-arc
 include $(THEOS_MAKE_PATH)/bundle.mk
 
 internal-stage::

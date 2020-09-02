@@ -9,6 +9,7 @@ TWEAK_NAME = ColorMyBattery
 ColorMyBattery_FILES = Tweak.xm
 ColorMyBattery_FRAMEWORKS = UIKit
 ColorMyBattery_LIBRARIES = colorpicker
+ColorMyBattery_CFLAGS = -fobjc-arc
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 after-install::

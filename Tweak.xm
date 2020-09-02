@@ -268,7 +268,7 @@ static void reloadSettings(CFNotificationCenterRef center, void *observer, CFStr
       //bodyColorAlpha = [prefs objectForKey:@"bodyColorAlpha"] ? [[prefs objectForKey:@"bodyColorAlpha"] doubleValue] : bodyColorAlpha;
       //isBattPerdisabled = [prefs objectForKey:@"HideBattPer"] ? [[prefs objectForKey:@"HideBattPer"] boolValue] : isBattPerdisabled;
   }
-  [prefs release];}
+}
 
 static void respring(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
   [[%c(FBSystemService) sharedInstance] exitAndRelaunch:YES];
@@ -277,7 +277,7 @@ static void respring(CFNotificationCenterRef center, void *observer, CFStringRef
 %ctor
 {
   if ([[NSBundle mainBundle].bundleIdentifier isEqualToString:@"com.apple.springboard"]) {
-        CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, reloadSettings, CFSTR("com.imkpatil.colormybattery.settingschanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);
+        //CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, reloadSettings, CFSTR("com.imkpatil.colormybattery.settingschanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);
         reloadSettings(nil, nil, nil, nil, nil);
         CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, respring, CFSTR("com.imkpatil.colormybattery.respring"), NULL, CFNotificationSuspensionBehaviorCoalesce);
     }

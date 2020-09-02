@@ -12,7 +12,7 @@
 @implementation colormybatListController
 - (id)specifiers {
 	if(_specifiers == nil) {
-		_specifiers = [[self loadSpecifiersFromPlistName:@"ColorMyBattery" target:self] retain];
+		_specifiers = [self loadSpecifiersFromPlistName:@"ColorMyBattery" target:self];
 	}
 	return _specifiers;
 }
@@ -31,8 +31,8 @@
     [defaults setObject:value forKey:specifier.properties[@"key"]];
     [defaults writeToFile:powercolorPath atomically:YES];
     //  NSDictionary *powercolorSettings = [NSDictionary dictionaryWithContentsOfFile:powercolorPath];
-    CFStringRef toPost = (CFStringRef)specifier.properties[@"PostNotification"];
-    if(toPost) CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), toPost, NULL, NULL, YES);
+    // CFStringRef toPost = (CFBridRef)specifier.properties[@"PostNotification"];
+    // if(toPost) CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), toPost, NULL, NULL, YES);
 }
 
 // - (void)selectBattColor
