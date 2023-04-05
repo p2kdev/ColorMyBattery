@@ -31,6 +31,7 @@
 @end
 
 NSDictionary *pref = [[NSDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.imkpatil.colormybattery.plist"];
+
 static BOOL isEnabled = YES;
 static BOOL wantsCustomBoltColor = NO;
 static BOOL wantsCustomBodyColor = NO;
@@ -243,31 +244,22 @@ static UIColor* GetBattColor(int currentLevel)
 
 %end
 
-// %hook SBStatusBarStateAggregator
-//
-//   -(BOOL)_setItem:(int)arg1 enabled:(BOOL)arg2
-//   {
-//     if (arg1==9 && isBattPerdisabled)
-//     {
-//       return NO;
-//     }
-//
-//     return %orig;
-//   }
-//
-// %end
-
 static void reloadSettings(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
 
-  NSMutableDictionary *prefs = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.imkpatil.colormybattery.plist"];
-  if(prefs)
-  {
-      isEnabled = [prefs objectForKey:@"TwkEnabled"] ? [[prefs objectForKey:@"TwkEnabled"] boolValue] : isEnabled;
-      wantsCustomBodyColor = [prefs objectForKey:@"wantsCustomBodyColor"] ? [[prefs objectForKey:@"wantsCustomBodyColor"] boolValue] : wantsCustomBodyColor;
-      wantsCustomBoltColor = [prefs objectForKey:@"wantsCustomBoltColor"] ? [[prefs objectForKey:@"wantsCustomBoltColor"] boolValue] : wantsCustomBoltColor;
-      //bodyColorAlpha = [prefs objectForKey:@"bodyColorAlpha"] ? [[prefs objectForKey:@"bodyColorAlpha"] doubleValue] : bodyColorAlpha;
-      //isBattPerdisabled = [prefs objectForKey:@"HideBattPer"] ? [[prefs objectForKey:@"HideBattPer"] boolValue] : isBattPerdisabled;
-  }
+		static CFStringRef prefsKey = CFSTR("com.imkpatil.colormybattery");
+		CFPreferencesAppSynchronize(prefsKey);
+
+		if (CFBridgingRelease(CFPreferencesCopyAppValue((CFStringRef)@"TwkEnabled", prefsKey))) {
+			isEnabled = [(id)CFBridgingRelease(CFPreferencesCopyAppValue((CFStringRef)@"TwkEnabled", prefsKey)) boolValue];
+		}
+
+		if (CFBridgingRelease(CFPreferencesCopyAppValue((CFStringRef)@"wantsCustomBodyColor", prefsKey))) {
+			wantsCustomBodyColor = [(id)CFBridgingRelease(CFPreferencesCopyAppValue((CFStringRef)@"wantsCustomBodyColor", prefsKey)) boolValue];
+		}
+
+		if (CFBridgingRelease(CFPreferencesCopyAppValue((CFStringRef)@"wantsCustomBoltColor", prefsKey))) {
+			wantsCustomBoltColor = [(id)CFBridgingRelease(CFPreferencesCopyAppValue((CFStringRef)@"wantsCustomBoltColor", prefsKey)) boolValue];
+		}   
 }
 
 static void respring(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
