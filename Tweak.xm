@@ -30,7 +30,7 @@
   -(long long)getPowerMode;
 @end
 
-NSDictionary *pref = [[NSDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.imkpatil.colormybattery.plist"];
+NSDictionary *pref = [[NSDictionary alloc] initWithContentsOfFile:@"/var/jb/var/mobile/Library/Preferences/com.imkpatil.colormybattery.plist"];
 
 static BOOL isEnabled = YES;
 static BOOL wantsCustomBoltColor = NO;
